@@ -8,8 +8,8 @@ require_once ('lib/PageTemplate.php');
 $dbContext = new DBContext();
 $username = $_POST['username'] ?? '';
 $password = $_POST['password'] ?? '';
-$selector = $_GET['selector'] ?? false;
-$message = '';
+$message = $_GET['message'] ?? '';
+
 
 
 
@@ -27,9 +27,6 @@ if (!isset($TPL)) {
 
 
 
-if ($selector) {
-    $message = 'Email address has been verified';
-}
 
 if (isset($_POST['login'])) {
     try {

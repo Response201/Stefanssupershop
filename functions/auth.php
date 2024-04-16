@@ -12,8 +12,8 @@ function auth()
 
 
     if (isset($_POST['create'])) {
-        $username = $_POST['username'];
-        $password = $_POST['password']; 
+        $username = $_POST['username']?? '';
+        $password = $_POST['password']?? ''; 
 
     try{
         $userId = $dbContext->getUsersDatabase()->getAuth()->register($username, $password, $username, function ($selector, $token) {
@@ -33,10 +33,10 @@ $mail->Password =  $smtppassword;
 $mail->SMTPSecure =  $smtpsecure;
 $mail->Port = $smtpport;
 
-            $mail->From = "solitaire@astoria.com"; 
+            $mail->From = "hello@superdupershop.com"; 
             $mail->FromName = "Hello"; //To address and name 
             $mail->addAddress($_POST['username']); //Address to which recipient will reply 
-            $mail->addReplyTo("noreply@ysuperdupershop.com", "No-Reply"); //CC and BCC 
+            $mail->addReplyTo("noreply@superdupershop.com", "No-Reply"); //CC and BCC 
             $mail->isHTML(true); 
             $mail->Subject = "Registrering"; 
             $url = 'http://localhost:8000/verify_email?selector=' . \urlencode($selector) . '&token=' . \urlencode($token);   
@@ -68,7 +68,3 @@ $mail->Port = $smtpport;
 
 
  }
-
-
-
-

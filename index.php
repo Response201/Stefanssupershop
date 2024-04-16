@@ -25,7 +25,7 @@ $router->addRoute('/register', function () {
 
 
 $router->addRoute('/verify_email', function () {
-    require __DIR__ . '/Pages/verify.php';
+    require __DIR__ . '/functions/verify.php';
 });
 
 $router->addRoute('/login', function () {

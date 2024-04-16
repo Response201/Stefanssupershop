@@ -8,7 +8,7 @@ $name = $dbContext->getUser($username);
 if ($user && $name) {
     echo " 
 <li class=\"nav-item\"> 
-<a  class=\"nav-link text-dark\" href=\"/Account/Manage\" title=\"Manage\">
+<a  class=\"nav-link text-dark\" href=\"\" title=\"Manage\">
 Hello $name->fullname!
 </a>
 </li>
