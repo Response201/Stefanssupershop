@@ -24,7 +24,7 @@ function auth()
             $smtpsecure = $_ENV['smtpsecure'];
            
             
-            $mail = new PHPMailer\PHPMailer\PHPMailer(true);
+$mail = new PHPMailer\PHPMailer\PHPMailer(true);
 $mail->isSMTP();
 $mail->Host = $smtphost;
 $mail->SMTPAuth = true;

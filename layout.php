@@ -1,16 +1,21 @@
 <?php
-require_once('lib/PageTemplate.php');
-require_once("vendor/autoload.php");
-
+require_once ('lib/PageTemplate.php');
+require_once ("vendor/autoload.php");
+require_once ('Models/Database.php');
+$dbContext = new DBContext();
+$userLoggedIn = $dbContext->getUsersDatabase()->getAuth()->isLoggedIn();
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title><?php if(isset($TPL->PageTitle)) { echo $TPL->PageTitle; } ?></title>
+    <title><?php if (isset($TPL->PageTitle)) {
+        echo $TPL->PageTitle;
+    } ?></title>
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet">
     <link type="text/css" rel="stylesheet" href="/css/bootstrap.min.css" />
     <link type="text/css" rel="stylesheet" href="/css/slick.css" />
@@ -23,15 +28,18 @@ require_once("vendor/autoload.php");
       <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
-    <?php if(isset($TPL->ContentHead)) { include $TPL->ContentHead; }
-    
-    
-    
-    
-    
-    
+    <?php if (isset($TPL->ContentHead)) {
+        include $TPL->ContentHead;
+    }
+
+
+
+
+
+
     ?>
 </head>
+
 <body>
     <!-- HEADER -->
     <header>
@@ -45,20 +53,11 @@ require_once("vendor/autoload.php");
                 </ul>
                 <ul class="header-links pull-right">
                     <ul class="navbar-nav">
-                            <li class="nav-item">
-                                <a  class="nav-link text-dark" href="/Account/Manage" title="Manage">Hello @User.Identity?.Name!</a>
-                            </li>
-                            <li class="nav-item">
-                                <a  class="nav-link text-dark" href="/Account/Logout" title="Manage">Logout</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" href="/register">Register</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" href="/login">Login</a>
-                            </li>
-                        </ul>
-                        
+
+                        <?php require_once ("components/navbar.php"); ?>
+
+                    </ul>
+
                 </ul>
             </div>
         </div>
@@ -89,16 +88,20 @@ require_once("vendor/autoload.php");
                     </div>
                     <!-- /SEARCH BAR -->
                     <!-- ACCOUNT -->
-                    <div class="col-md-3 clearfix">
-                        <div class="header-ctn">
-                            <!-- Wishlist -->
-                            <div>
-                                <a href="#">
-                                    <i class="fa fa-heart-o"></i>
-                                    <span>Your Wishlist</span>
-                                    <div class="qty">2</div>
-                                </a>
-                            </div>
+                    <?php if ($userLoggedIn) {
+                   
+
+echo '   <div class="col-md-3 clearfix">
+<div class="header-ctn">
+ <!-- Wishlist -->
+<div>
+    <a href="#">
+        <i class="fa fa-heart-o"></i>
+        <span>Your Wishlist</span>
+        <div class="qty">2</div>
+    </a>
+</div>
+
                             <!-- /Wishlist -->
                             <!-- Cart -->
                             <div class="dropdown">
@@ -135,9 +138,18 @@ require_once("vendor/autoload.php");
                                         <small>3 Item(s) selected</small>
                                         <h5>SUBTOTAL: $2940.00</h5>
                                     </div>
+
                                     <div class="cart-btns">
-                                        <a href="#">View Cart</a>
-                                        <a href="#">Checkout  <i class="fa fa-arrow-circle-right"></i></a>
+
+                                       
+
+
+                                          <a href="#">View Cart</a>
+<a href="#">Checkout <i class="fa fa-arrow-circle-right"></i></a>
+
+
+                                      
+
                                     </div>
                                 </div>
                             </div>
@@ -151,7 +163,8 @@ require_once("vendor/autoload.php");
                             </div>
                             <!-- /Menu Toogle -->
                         </div>
-                    </div>
+                    </div>';
+                } ?>
                     <!-- /ACCOUNT -->
                 </div>
                 <!-- row -->
@@ -189,8 +202,10 @@ require_once("vendor/autoload.php");
         <div class="container">
 
 
-        <?php if(isset($TPL->ContentBody)) { include $TPL->ContentBody; } ?>
-            
+            <?php if (isset($TPL->ContentBody)) {
+                include $TPL->ContentBody;
+            } ?>
+
         </div>
         <!-- /container -->
     </div>
@@ -206,7 +221,8 @@ require_once("vendor/autoload.php");
                     <div class="col-md-3 col-xs-6">
                         <div class="footer">
                             <h3 class="footer-title">About Us</h3>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut.</p>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
+                                incididunt ut.</p>
                             <ul class="footer-links">
                                 <li><a href="#"><i class="fa fa-map-marker"></i>1734 Stonecoal Road</a></li>
                                 <li><a href="#"><i class="fa fa-phone"></i>+021-95-51-84</a></li>
@@ -242,8 +258,7 @@ require_once("vendor/autoload.php");
                             </ul>
                         </div>
                     </div>
-
-                    <div class="col-md-3 col-xs-6">
+                    <?php if ($userLoggedIn) { echo '<div class="col-md-3 col-xs-6">
                         <div class="footer">
                             <h3 class="footer-title">Service</h3>
                             <ul class="footer-links">
@@ -254,7 +269,8 @@ require_once("vendor/autoload.php");
                                 <li><a href="#">Help</a></li>
                             </ul>
                         </div>
-                    </div>
+                    </div>';  } ?>
+                  
                 </div>
                 <!-- /row -->
             </div>
@@ -278,7 +294,9 @@ require_once("vendor/autoload.php");
                         <span class="copyright">
                             <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
                             Copyright &copy;
-                            <script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
+                            <script>document.write(new Date().getFullYear());</script> All rights reserved | This
+                            template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a
+                                href="https://colorlib.com" target="_blank">Colorlib</a>
                             <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
                         </span>
                     </div>
@@ -299,4 +317,5 @@ require_once("vendor/autoload.php");
     <script src="/js/main.js"></script>
     @RenderSection("Scripts", false)
 </body>
+
 </html>

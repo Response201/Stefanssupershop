@@ -31,5 +31,14 @@ $router->addRoute('/verify_email', function () {
 $router->addRoute('/login', function () {
     require __DIR__ . '/Pages/AccountLogin.php';
 });
+
+$router->addRoute('/logout', function () {
+    require __DIR__ . '/functions/logout.php';
+});
+
+
+
+
+
 $router->dispatch();
 ?>
