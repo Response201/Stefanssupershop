@@ -45,15 +45,15 @@ if (isset($_POST['create'])) {
     } else {
 
         $v->field('username')->required()->email()->min_val(1)->max_len(100);
-        /*   $v->field('name')->required()->alpha()->min_val(1)->max_len(200);
-          $v->field('street')->required()->alpha()->min_val(1)->max_len(150);
+        /*   $v->field('name')->required()->min_len(1)->max_len(200);
+          $v->field('street')->required()->min_len(1)->max_len(150);
           $v->field('postcode')->required()->numeric()->min_val(1)->max_len(20);
-          $v->field('city')->required()->alpha()->min_val(1)->max_len(100); */
+          $v->field('city')->required()->alpha()->min_len(1)->max_len(100); */
         if ($v->is_valid()) {
             $message = auth();
 
 
-            if ($message === 'Tack för din registerinbg, kolla mailet och verifiera ditt konto') {
+            if ($message === 'Thank you for your registration, check your email and verify your account') {
 
                 $dbContext->createIfNotExisting($username, $name, $street, $postcode, $city);
 
@@ -95,16 +95,16 @@ if (isset($_POST['create'])) {
                     <input class="input" type="password" name="passwordAgain" placeholder="Repeat Password">
                     <br />
                     <br />
-                    <input class="input" type="text" name="name" placeholder="Name">
+                    <input class="input" type="text" name="name" placeholder="Enter Your Name">
                     <br />
                     <br />
-                    <input class="input" name="street" placeholder="Street address">
+                    <input class="input" name="street" placeholder="Enter Your Streetaddress">
                     <br />
                     <br />
-                    <input class="input" type="postal" name="postcode" placeholder="Postal code">
+                    <input class="input" type="postal" name="postcode" placeholder="Enter Your Postal code">
                     <br />
                     <br />
-                    <input class="input" type="text" name="city" placeholder="City">
+                    <input class="input" type="text" name="city" placeholder="Enter Your City">
                     <br />
                     <br />
                     <button class="newsletter-btn" type="submit" name="create"><i class="fa fa-envelope"></i>

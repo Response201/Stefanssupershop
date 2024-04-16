@@ -8,10 +8,10 @@ $message = '';
 
     try {
         $dbContext->getUsersDatabase()->getAuth()->confirmEmail($_GET['selector'], $_GET['token']);
-        $message = 'Ditt konto är nu verifierat';
+        $message = 'Your account is now verified';
 
     } catch (Delight\Auth\AuthException $e) {
-        $message = 'Något gick fel vid verifieringen';
+        $message = 'Something went wrong during verification';
 
     }
 

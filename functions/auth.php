@@ -50,12 +50,12 @@ $mail->Port = $smtpport;
          
        
        
-        return 'Tack för din registerinbg, kolla mailet och verifiera ditt konto';
+        return 'Thank you for your registration, check your email and verify your account';
      
 }
     catch(Exception $e){
      
-        return "Error";
+        return "Something went wrong";
       
         
     }

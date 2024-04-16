@@ -24,13 +24,8 @@ if (!isset($TPL)) {
     exit;
 }
 
-
-
-
-
 if (isset($_POST['login'])) {
     try {
-
         $dbContext->getUsersDatabase()->getAuth()->login($username, $password);
         header('Location: /');
         exit;
@@ -59,7 +54,7 @@ if (isset($_POST['login'])) {
                     <button class="newsletter-btn" type="submit" name="login"><i class="fa fa-envelope"></i>
                         Login</button>
                 </form>
-                <a href="">Lost password?</a>
+                <a href="/lostpassword">Lost password?</a>
             </div>
         </div>
     </div>

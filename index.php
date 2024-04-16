@@ -35,9 +35,17 @@ $router->addRoute('/login', function () {
 $router->addRoute('/logout', function () {
     require __DIR__ . '/functions/logout.php';
 });
+$router->addRoute('/lostpassword', function () {
+    require __DIR__ . '/Pages/lostPassword.php';
+});
+$router->addRoute('/resetpassword', function () {
+    require __DIR__ . '/Pages/resetPassword.php';
+});
 
 
-
+$router->addRoute('/reset_password', function () {
+    require __DIR__ . '/functions/ValidateResetPassword.php';
+});
 
 
 $router->dispatch();
