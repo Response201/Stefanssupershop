@@ -21,46 +21,45 @@ if (isset($_POST['newPassword'])) {
     $password = $_POST['password'] ?? '';
     $passwordAgain = $_POST['passwordAgain'] ?? '';
 
-   
-    if(!$password || !$passwordAgain){
 
-        $message ='Empty fields';
+    if (!$password || !$passwordAgain) {
+
+        $message = 'Empty fields';
     }
 
 
-    if($password !== $passwordAgain){
+    if ($password !== $passwordAgain) {
 
-        $message ='Passwords dont match';
+        $message = 'Passwords dont match';
     }
 
-if( $password === $passwordAgain){
-    $selector=$_GET['selector'];
-    $token= $_GET['token'];
-
-  
+    if ($password === $passwordAgain) {
+        $selector = $_GET['selector'];
+        $token = $_GET['token'];
 
 
-    try {
-        $dbContext->getUsersDatabase()->getAuth()->resetPassword($selector, $token, $_POST['password']);
-        $message="Your password has been updated";
-        header("Location:/login?message=$message");
-       
+
+
+        try {
+            $dbContext->getUsersDatabase()->getAuth()->resetPassword($selector, $token, $_POST['password']);
+            $message = "Your password has been updated";
+            session_destroy();
+            header("Location:/login?message=$message");
+
+        } catch (\Delight\Auth\ResetDisabledException $e) {
+            $message = 'Password reset is disabled';
+            die('Password reset is disabled');
+        }
+
+
+
+
     }
-
-    catch (\Delight\Auth\ResetDisabledException $e) {
-        $message ='Password reset is disabled';
-        die('Password reset is disabled');
-    }
-  
-
-
- 
-    }
-     }
+}
 
 
 
-
+$time = $_GET['time'];
 
 
 
@@ -79,15 +78,15 @@ if( $password === $passwordAgain){
                     <br />
                     <br />
                     <input class="input" type="password" name="passwordAgain" placeholder="Repeat Password">
-                 
+
                     <br />
                     <br />
-                   
+
                     <button class="newsletter-btn" type="submit" name="newPassword"><i class="fa fa-envelope"></i>
                         Send</button>
                 </form>
 
-
+                <p><?php echo " $time"; ?></p>
                 <p><?php echo " $message"; ?></p>
 
             </div>

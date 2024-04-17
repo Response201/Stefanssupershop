@@ -5,13 +5,18 @@ require_once ('Models/Database.php');
 
 function getResetPasswordToken()
 {
-
+    
+    if (session_status() == PHP_SESSION_NONE) {
+        session_start();
+    }
+    
+    $_SESSION['reset_password_session'] = time();
+  
 
     $dbContext = new DbContext();
 
     $username = $_POST['username'] ?? '';
-
-
+  
     try {
         $dbContext->getUsersDatabase()->getAuth()->forgotPassword($username, function ($selector, $token) {
             $smtphost = $_ENV['smtphost'] ?? '';
@@ -38,7 +43,9 @@ function getResetPasswordToken()
             $mail->Subject = "Reset password";
             $url = 'http://localhost:8000/reset_password?selector=' . \urlencode($selector) . '&token=' . \urlencode($token);
 
-
+            
+        
+           
             $mail->Body = "<i>Hej, klicka på <a href='$url'>$url</a></i> för att skapa ett nytt lösenord";
             $mail->send();
 
@@ -51,7 +58,7 @@ function getResetPasswordToken()
 
     } catch (Exception $e) {
 
-        return "Something went wrong";
+        return "Something went wrong" . $e->getMessage();
 
 
     }

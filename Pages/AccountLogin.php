@@ -27,6 +27,7 @@ if (!isset($TPL)) {
 if (isset($_POST['login'])) {
     try {
         $dbContext->getUsersDatabase()->getAuth()->login($username, $password);
+        /* $ip = $auth->getIpAddress(); */
         header('Location: /');
         exit;
     } catch (Exception $e) {
