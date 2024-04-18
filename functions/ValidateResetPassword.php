@@ -2,17 +2,13 @@
 ob_start();
 require 'vendor/autoload.php';
 require_once ('Models/Database.php');
-
-
 session_start();
 /* uträkning för att kontrollera att länken inte är äldre än 24 timmar */
 $current_time = time();
 $reset_time = $_SESSION['reset_password_session'];
 $time_difference = $current_time - $reset_time;
 $hours_passed = floor($time_difference / 3600);
-
 setNewPasswordActivLink($hours_passed);
-
 function setNewPasswordActivLink($hours_passed)
 {
     $dbContext = new DBContext();
@@ -32,8 +28,6 @@ function setNewPasswordActivLink($hours_passed)
         $selector = $_SESSION['reset_selector'];
         $token = $_SESSION['reset_token'];
         header("Location:/lostpassword?message=$message&selector=$selector&token=$token");
-
     }
-
 }
 ?>

@@ -2,17 +2,10 @@
 ob_start();
 require 'vendor/autoload.php';
 require_once ('Models/Database.php');
+require_once ('functions/loginSession.php');
 require_once ('lib/PageTemplate.php');
-
-
 $dbContext = new DBContext();
-$username = $_POST['username'] ?? '';
-$password = $_POST['password'] ?? '';
 $message = $_GET['message'] ?? '';
-
-
-
-
 
 
 # trick to execute 1st time, but not 2nd so you don't have an inf loop
@@ -24,26 +17,27 @@ if (!isset($TPL)) {
     exit;
 }
 
+# login attempt -> click btn
 if (isset($_POST['login'])) {
+    $username = $_POST['username'] ?? '';
+    $password = $_POST['password'] ?? '';
+
     try {
         $dbContext->getUsersDatabase()->getAuth()->login($username, $password);
-        /* $ip = $auth->getIpAddress(); */
+        loginSession();
         header('Location: /');
         exit;
     } catch (Exception $e) {
         $message = "Could not login";
     }
 }
-
 ?>
 <p>
 <div class="row">
-
     <div class="row">
         <div class="col-md-12">
             <div class="newsletter">
                 <p>User<strong>&nbsp;LOGIN</strong></p>
-
                 <p> <?php echo "$message"; ?> </p>
                 <form method="POST">
                     <input class="input" type="email" name="username" placeholder="Enter Your Email">
@@ -59,9 +53,5 @@ if (isset($_POST['login'])) {
             </div>
         </div>
     </div>
-
-
 </div>
-
-
 </p>

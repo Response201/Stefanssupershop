@@ -12,8 +12,8 @@ if (!isset($TPL)) {
     $TPL->ContentBody = __FILE__;
     include "layout.php";
     exit;
-
 }
+
 
 $message = "";
 $username = "";
@@ -25,11 +25,7 @@ $postcode = "";
 $city = "";
 
 
-
-
-
 if (isset($_POST['create'])) {
-
     $username = $_POST['username'] ?? '';
     $password = $_POST['password'] ?? '';
     $passwordAgain = $_POST['passwordAgain'] ?? '';
@@ -43,7 +39,6 @@ if (isset($_POST['create'])) {
     } else if (!$password || !$passwordAgain || !$username || !$name || !$street || !$postcode || !$city) {
         $message = "empty fields";
     } else {
-
         $v->field('username')->required()->email()->min_val(1)->max_len(100);
         /*   $v->field('name')->required()->min_len(1)->max_len(200);
           $v->field('street')->required()->min_len(1)->max_len(150);
@@ -51,30 +46,17 @@ if (isset($_POST['create'])) {
           $v->field('city')->required()->alpha()->min_len(1)->max_len(100); */
         if ($v->is_valid()) {
             $userId = auth();
-
-
             if ($userId) {
                 $id = intval($userId);
                 $dbContext->createIfNotExisting($name, $street, $postcode, $city, $id);
                 $message = 'Thank you for your registration, check your email and verify your account';
             }
-
-
         }
     }
-
-
-
-
-
-
-
-
 }
 ?>
 <p>
 <div class="row">
-
     <div class="row">
         <div class="col-md-12">
             <div class="newsletter">
@@ -104,16 +86,9 @@ if (isset($_POST['create'])) {
                     <button class="newsletter-btn" type="submit" name="create"><i class="fa fa-envelope"></i>
                         Register</button>
                 </form>
-
-
                 <p><?php echo "$message"; ?></p>
-
             </div>
         </div>
     </div>
-
-
 </div>
-
-
 </p>

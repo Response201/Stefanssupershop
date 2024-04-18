@@ -2,8 +2,8 @@
 require_once ('Models/Database.php');
 $dbContext = new DBContext();
 $user = $dbContext->getUsersDatabase()->getAuth()->isLoggedIn();
-$username = $dbContext->getUsersDatabase()->getAuth()->getUserId();
-$name = $dbContext->getUser($username);
+$id = $dbContext->getUsersDatabase()->getAuth()->getUserId();
+$name = $dbContext->getUser($id);
 
 if ($user && $name) {
     echo " 
