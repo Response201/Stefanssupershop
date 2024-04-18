@@ -2,7 +2,7 @@
 
 class Userdata
 {
-    public $username;
+
     public $name;
     public $street;
     public $postcode;

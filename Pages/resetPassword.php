@@ -38,12 +38,11 @@ if (isset($_POST['newPassword'])) {
         $token = $_GET['token'];
 
 
-
-
         try {
             $dbContext->getUsersDatabase()->getAuth()->resetPassword($selector, $token, $_POST['password']);
             $message = "Your password has been updated";
-            session_destroy();
+            $_SESSION['reset_selector'] = '';
+             $_SESSION['reset_token'] = '';
             header("Location:/login?message=$message");
 
         } catch (\Delight\Auth\ResetDisabledException $e) {

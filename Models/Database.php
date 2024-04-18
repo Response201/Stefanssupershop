@@ -24,46 +24,53 @@ class DBContext
 
 
 
-    function getUser($username)
+    function getUser($userId)
     {
-        $sql = "SELECT * FROM usersdata where username=:username";
+
+       
+        $sql = "SELECT * FROM usersdata where userId=:userId";
         $prep = $this->pdo->prepare($sql);
         $prep->setFetchMode(PDO::FETCH_CLASS, 'Userdata');
-        $prep->execute(['username' => $username]);
+        $prep->execute(['userId' =>  $userId]);
         return $prep->fetch();
     }
 
-    function getUserId($username)
+    function getUserByUsername($username)
     {
+       
         $sql = "SELECT * FROM users where username=:username";
         $prep = $this->pdo->prepare($sql);
-        $prep->execute(['username' => $username]);
+        $prep->execute(['username' =>  $username]);
         return $prep->fetch();
 
     }
 
 
-    function createIfNotExisting($username, $name, $street, $postcode, $city)
+    function createIfNotExisting($name, $street, $postcode, $city, $userId)
     {
-        $existing = $this->getUser($username);
-        $existingId = $this->getUserId($username);
-        if ($existing && $existingId) {
-            return;
-        };
 
-        return $this->addUser($username, $name, $street, $postcode, $city );
+        $existingUsersdata = $this->getUser($userId);
+      
+        if ($existingUsersdata) {
+            return;
+        }else{
+
+            return $this->addUser( $name, $street, $postcode, $city, $userId );
+        }
+
+       
     }
 
 
 
-    function addUser($username, $name, $street, $postcode, $city)
+    function addUser( $name, $street, $postcode, $city,  $userId)
   
     {
 
-$postC = intval( $postcode);
-
-        $prep = $this->pdo->prepare('INSERT INTO usersdata (username, fullname, street, postcode, city) VALUES(:username, :fullname, :street, :postcode, :city)');
-        $prep->execute(['username' => $username, 'fullname' => $name, 'street' => $street, 'postcode' => $postC , 'city' => $city]);
+$postCode = intval($postcode);
+$id = intval($userId);
+        $prep = $this->pdo->prepare('INSERT INTO usersdata ( fullname, street, postcode, city, userId) VALUES( :fullname, :street, :postcode, :city, :userId)');
+        $prep->execute([ 'fullname' => $name, 'street' => $street, 'postcode' => $postCode , 'city' => $city, 'userId' => $id]);
         return $this->pdo->lastInsertId();
     }
 
@@ -72,18 +79,18 @@ $postC = intval( $postcode);
     function initIfNotInitialized()
     {
         static $initialized = false;
-        if ($initialized)
+        if ($initialized){
             return;
-
+}
         $this->usersDatabase->setupUsers();
 
-        $sql = 'CREATE TABLE IF NOT EXISTS `usersdata` (
-            `username` varchar(249)  NOT NULL,
+        $sql ='CREATE TABLE IF NOT EXISTS `usersdata`(
             `fullname` varchar(200) NOT NULL,
             `street` varchar(150) NOT NULL,
             `postcode` varchar(20) NOT NULL,
             `city` varchar(100) NOT NULL,
-            PRIMARY KEY (`username`)
+            `userId` varchar(10) NOT NULL,
+            PRIMARY KEY (`userId`)
            
         )';
         $this->pdo->exec($sql);
@@ -91,4 +98,5 @@ $postC = intval( $postcode);
         $initialized = true;
     }
 }
+ 
 ?>

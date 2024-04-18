@@ -37,7 +37,7 @@ if (isset($_POST['create'])) {
     $street = $_POST['street'] ?? '';
     $postcode = $_POST['postcode'] ?? '';
     $city = $_POST['city'] ?? '';
-
+    $message = "Could not create account";
     if ($password !== $passwordAgain) {
         $message = "password not match";
     } else if (!$password || !$passwordAgain || !$username || !$name || !$street || !$postcode || !$city) {
@@ -50,22 +50,16 @@ if (isset($_POST['create'])) {
           $v->field('postcode')->required()->numeric()->min_val(1)->max_len(20);
           $v->field('city')->required()->alpha()->min_len(1)->max_len(100); */
         if ($v->is_valid()) {
-            $message = auth();
+            $userId = auth();
 
 
-            if ($message === 'Thank you for your registration, check your email and verify your account') {
-
-                $dbContext->createIfNotExisting($username, $name, $street, $postcode, $city);
-
-
+            if ($userId) {
+                $id = intval($userId);
+                $dbContext->createIfNotExisting($name, $street, $postcode, $city, $id);
+                $message = 'Thank you for your registration, check your email and verify your account';
             }
 
 
-
-
-
-        } else {
-            $message = "Could not create account";
         }
     }
 
@@ -112,7 +106,7 @@ if (isset($_POST['create'])) {
                 </form>
 
 
-                <p><?php echo " $message"; ?></p>
+                <p><?php echo "$message"; ?></p>
 
             </div>
         </div>
