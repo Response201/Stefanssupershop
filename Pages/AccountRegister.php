@@ -13,17 +13,7 @@ if (!isset($TPL)) {
     include "layout.php";
     exit;
 }
-
-
 $message = "";
-$username = "";
-$password = "";
-$passwordAgain = "";
-$name = "";
-$street = "";
-$postcode = "";
-$city = "";
-
 
 if (isset($_POST['create'])) {
     $username = $_POST['username'] ?? '';
@@ -31,7 +21,7 @@ if (isset($_POST['create'])) {
     $passwordAgain = $_POST['passwordAgain'] ?? '';
     $name = $_POST['name'] ?? '';
     $street = $_POST['street'] ?? '';
-    $postcode = $_POST['postcode'] ?? '';
+    $postcode = intval($_POST['postcode'] ?? '');
     $city = $_POST['city'] ?? '';
     $message = "Could not create account";
     if ($password !== $passwordAgain) {
@@ -40,10 +30,11 @@ if (isset($_POST['create'])) {
         $message = "empty fields";
     } else {
         $v->field('username')->required()->email()->min_val(1)->max_len(100);
-        /*   $v->field('name')->required()->min_len(1)->max_len(200);
-          $v->field('street')->required()->min_len(1)->max_len(150);
-          $v->field('postcode')->required()->numeric()->min_val(1)->max_len(20);
-          $v->field('city')->required()->alpha()->min_len(1)->max_len(100); */
+        $v->field('password')->required()->match("/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/");
+        $v->field('name')->required()->alpha([' '])->min_val(1)->max_len(100);
+        $v->field('street')->required()->alpha_num([' '])->min_len(1)->max_len(150);
+        $v->field('postcode')->required()->numeric([' ']);
+        $v->field('city')->required()->alpha([' '])->min_len(2)->max_len(100);
         if ($v->is_valid()) {
             $userId = auth();
             if ($userId) {
@@ -51,6 +42,12 @@ if (isset($_POST['create'])) {
                 $dbContext->createIfNotExisting($name, $street, $postcode, $city, $id);
                 $message = 'Thank you for your registration, check your email and verify your account';
             }
+
+        } else {
+            $message = "Somthing went wrong";
+
+
+
         }
     }
 }
@@ -64,10 +61,16 @@ if (isset($_POST['create'])) {
                 <form method="POST">
                     <input class="input" type="email" name="username" placeholder="Enter Your Email">
                     <br />
+
                     <br />
                     <input class="input" type="password" name="password" placeholder="Enter Your Password">
                     <br />
+
+                    <label class='input'
+                        style="border:none; font-weight: 100; font-size: 10px; text-align: left; ">minimum six
+                        characters, at least one uppercase letter and one special character</label>
                     <br />
+
                     <input class="input" type="password" name="passwordAgain" placeholder="Repeat Password">
                     <br />
                     <br />

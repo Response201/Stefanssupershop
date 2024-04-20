@@ -19,23 +19,26 @@ if (isset($_POST['newPassword'])) {
     $passwordAgain = $_POST['passwordAgain'] ?? '';
     if (!$password || !$passwordAgain) {
         $message = 'Empty fields';
-    }
-    if ($password !== $passwordAgain) {
+    } else if ($password !== $passwordAgain) {
         $message = 'Passwords dont match';
-    }
-    if ($password === $passwordAgain) {
-        $selector = $_GET['selector'];
-        $token = $_GET['token'];
-        try {
-            $dbContext->getUsersDatabase()->getAuth()->resetPassword($selector, $token, $_POST['password']);
-            $message = "Your password has been updated";
-            /* återställer session token och selector så kund kan få ny möjlighet att återställa sitt lösenord i framtiden */
-            $_SESSION['reset_selector'] = '';
-            $_SESSION['reset_token'] = '';
-            header("Location:/login?message=$message");
-        } catch (\Delight\Auth\ResetDisabledException $e) {
-            $message = 'Password reset is disabled';
-            die('Password reset is disabled');
+    } else {
+        $v->field('password')->required()->match("/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/");
+        if ($v->is_valid()) {
+            $selector = $_GET['selector'];
+            $token = $_GET['token'];
+            try {
+                $dbContext->getUsersDatabase()->getAuth()->resetPassword($selector, $token, $_POST['password']);
+                $message = "Your password has been updated";
+                /* återställer session token och selector så kund kan få ny möjlighet att återställa sitt lösenord i framtiden */
+                $_SESSION['reset_selector'] = '';
+                $_SESSION['reset_token'] = '';
+                header("Location:/login?message=$message");
+            } catch (\Delight\Auth\ResetDisabledException $e) {
+                $message = 'Password reset is disabled';
+                die('Password reset is disabled');
+            }
+        } else {
+            $message = 'Passwords dont meet rrequirements';
         }
     }
 }
@@ -50,6 +53,9 @@ $time = $_GET['time'];
                 <form method="POST">
                     <input class="input" type="password" name="password" placeholder="New Password">
                     <br />
+                    <label class='input'
+                        style="border:none; font-weight: 100; font-size: 10px; text-align: left; ">minimum six
+                        characters, at least one uppercase letter and one special character</label>
                     <br />
                     <input class="input" type="password" name="passwordAgain" placeholder="Repeat Password">
                     <br />
