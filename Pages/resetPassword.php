@@ -38,7 +38,7 @@ if (isset($_POST['newPassword'])) {
                 die('Password reset is disabled');
             }
         } else {
-            $message = 'Passwords dont meet rrequirements';
+            $message = 'Passwords dont meet requirements';
         }
     }
 }
@@ -63,7 +63,7 @@ $time = $_GET['time'];
                     <button class="newsletter-btn" type="submit" name="newPassword"><i class="fa fa-envelope"></i>
                         Send</button>
                 </form>
-                <p><?php echo " $time"; ?></p>
+
                 <p><?php echo " $message"; ?></p>
             </div>
         </div>

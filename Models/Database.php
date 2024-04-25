@@ -1,6 +1,9 @@
 <?php
 require_once ('Models/Userdata.php');
 require_once ('Models/UserDatabase.php');
+require_once ('Models/LoginSessiondata.php');
+
+
 class DBContext
 {
     private $pdo;
@@ -53,37 +56,24 @@ class DBContext
         return $this->pdo->lastInsertId();
     }
 
-
-
-
-
+    
     /* loggar alla lyckade inloggningar av användare */
-
-
+    
     function getaddLoginSession($userId, $timeStamp)
     {
-
         $sql = "SELECT * FROM LoginSession where userId=:userId AND timeStamp=:timeStamp";
         $prep = $this->pdo->prepare($sql);
         $prep->execute(['userId' => $userId, 'timeStamp' => $timeStamp]);
+        $prep->setFetchMode(PDO::FETCH_CLASS, 'LoginSessiondata');
         return $prep->fetch();
-
-
     }
-
     function addLoginSession($userId, $timeStamp, $ip)
     {
-
         $prep = $this->pdo->prepare('INSERT INTO LoginSession ( userId, timeStamp, ip) VALUES(:userId, :timeStamp, :ip)');
         $prep->execute(['userId' => $userId, 'timeStamp' => $timeStamp, 'ip' => $ip]);
-
     }
-
-
-
     function createloginAttempts($userId, $timeStamp, $ip)
     {
-
         $existingUsersdata = $this->getaddLoginSession($userId, $timeStamp);
         if ($existingUsersdata) {
             return;
@@ -91,12 +81,6 @@ class DBContext
             return $this->addLoginSession($userId, $timeStamp, $ip);
         }
     }
-
-
-
-
-
-
 
 
 
@@ -111,15 +95,12 @@ class DBContext
         $sql = 'CREATE TABLE IF NOT EXISTS `usersdata`(
             `fullname` varchar(200) NOT NULL,
             `street` varchar(150) NOT NULL,
-            `postcode` varchar(20) NOT NULL,
+            `postcode` int NOT NULL,
             `city` varchar(100) NOT NULL,
             `userId` varchar(10) NOT NULL,
             PRIMARY KEY (`userId`)
         )';
         $this->pdo->exec($sql);
-
-
-
         $sql = 'CREATE TABLE IF NOT EXISTS `LoginSession`(
             `userId` varchar(10) NOT NULL,
             `ip` varchar(45) NOT NULL,
@@ -129,10 +110,6 @@ class DBContext
             FOREIGN KEY (`userId`) REFERENCES `usersdata`(`userId`)
         )';
         $this->pdo->exec($sql);
-
-
-
-
         $initialized = true;
     }
 }

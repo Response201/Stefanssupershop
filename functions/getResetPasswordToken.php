@@ -24,7 +24,14 @@ function getResetPasswordToken()
     }
     $subject = "Reset password";
     $url = 'http://localhost:8000/reset_password?selector=' . urlencode($_SESSION['reset_selector']) . '&token=' . urlencode($_SESSION['reset_token']);
-    $body = "<i>Hej, klicka på <a href='$url'>$url</a></i> för att skapa ett nytt lösenord";
+    $body = "<body style=\"width:99%; height:99%; background-color:#E4E7ED; display:flex; flex-direction:column; justify-content:center; align-items:center\">
+    <h1> Create new password </h1>
+   <a href='$url'> 
+   <button style=\"width:fit-content; height:40px; background-color:#D10024; font-weight: 800; border-radius:20px; padding:0 10px; color:#E4E7ED; border:none; \">
+   Click here!
+   </button>
+    </a>
+  </body>";
     mailer($selector, $token, $subject, $url, $body);
     return 'You have now received an email to reset your password';
 }
